@@ -1,6 +1,6 @@
 "use strict";
 
-const ar = [2, 2, 2, 4, 4, 6];
+const ar = [2, 2, 2, 4, 4, 6, 6];
 let count = 0;
 
 const orderArray = (ar) => {
