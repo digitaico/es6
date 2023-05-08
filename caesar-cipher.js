@@ -14,78 +14,26 @@
 const s = "There's-a-starman-waiting-in-the-sky"; // string to encrypt;
 const k = 3; // cipher rotation.
 
-const getCharCodes = (k, s) => {
-  //console.log(s.length);
-  //console.log(s.charCodeAt(4));
-  //console.log(String.fromCharCode(65, 66, 67, 90, 100, 122));
-
-  const charMap = [];
-  for (let i = 0; i < s.length; i++) {
-    const c = s[i].charCodeAt(0);
-    if ((c >= 65 - k && c <= 90 - k) || (c >= 97 - k && c <= 122 - k)) {
-      charMap.push(c + k);
-    } else if (c + k > 122) {
-      const diff = c + k - 122;
-      charMap.push(97 + diff);
-    } else if (c + k > 90) {
-      const diff = c + k - 90;
-      charMap.push(65 + diff);
+const getCharCodes = (s, k) => {
+  const n = parseInt(k % 26);
+  return [...s].map((char) => {
+    const c = char.charCodeAt(0);
+    if (c >= 65 && c <= 90) {
+      return c + (c + n > 90 ? n - 26 : n);
+    } else if (c >= 97 && c <= 122) {
+      return c + (c + n > 122 ? n - 26 : n);
     } else {
-      charMap.push(c);
+      return c;
     }
-  }
-  return charMap;
+  });
 };
 
 const buildStringFromCharCodes = (charmap) => {
-  const r = charmap.map((el) => +el);
-  const cm = [...r].join(",");
-  console.log(cm);
-  const res = String.fromCodePoint(
-    87,
-    107,
-    104,
-    117,
-    104,
-    39,
-    118,
-    45,
-    100,
-    45,
-    118,
-    119,
-    100,
-    117,
-    112,
-    100,
-    113,
-    45,
-    122,
-    100,
-    108,
-    119,
-    108,
-    113,
-    106,
-    45,
-    108,
-    113,
-    45,
-    119,
-    107,
-    104,
-    45,
-    118,
-    110,
-    99
-  );
-  console.log(res);
-  const res1 = String.fromCodePoint(cm);
-  console.log(res1);
+  return String.fromCodePoint(...charmap);
 };
 
-const encryptText = (k, s) => {
-  const cm = getCharCodes(k, s);
-  buildStringFromCharCodes(cm);
+const caesarCipher = (s, k) => {
+  const cm = getCharCodes(s, k);
+  return buildStringFromCharCodes(cm);
 };
-console.log(encryptText(k, s));
+console.log(caesarCipher(s, k));
