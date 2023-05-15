@@ -8,8 +8,8 @@
 // convertir lista a numeros
 // varificar cuales son lucky numbers
 //
-const date1 = "02-08-2024";
-const date2 = "10-08-2024";
+const date1 = "01-01-7580";
+const date2 = "26-07-9834";
 
 const conformDate = (str) => {
   const splitDate = str.split("-");
@@ -17,44 +17,29 @@ const conformDate = (str) => {
 };
 
 const formatDate = (str) => {
-  return str.toLocaleDateString("en-GB");
+  const d = str.getDate();
+  const m = str.getMonth() + 1;
+  const y = str.getFullYear();
+  return `${d}${m < 10 ? "0" + m : m}${y}`;
 };
 
 const getRangeOfDates = (s, e) => {
   const arr = [];
   for (s; s <= e; s.setDate(s.getDate() + 1)) {
-    arr.push(
-      formatDate(new Date(s))
-        .split("/")
-        .map((el) => el)
-    );
+    arr.push(parseInt(formatDate(new Date(s))));
   }
   return arr;
-};
-
-const conformDateStrings = (arr) => {
-  return arr
-    .map((list) => list.join(""))
-    .map((date) => {
-      return date[0] != 0 ? date : date.split("").slice(1, -1).join("");
-    });
-};
-
-const getDateNumbers = (arr) => {
-  return arr.map((date) => parseInt(date));
 };
 
 const countLuckyDates = (arr) => {
   let count = 0;
   arr.map((date) => (date % 4 == 0 || date % 7 == 0 ? count++ : ""));
-  return count;
+  return +count;
 };
 
-const getLuckyDates = (s, e) => {
+const primeDates = (s, e) => {
   const rangeOfDates = getRangeOfDates(conformDate(s), conformDate(e));
-  const stringDates = conformDateStrings(rangeOfDates);
-  const dateNumbers = getDateNumbers(stringDates);
-  return countLuckyDates(dateNumbers);
+  return countLuckyDates(rangeOfDates);
 };
 
-console.log(getLuckyDates(date1, date2));
+console.log(primeDates(date1, date2));
