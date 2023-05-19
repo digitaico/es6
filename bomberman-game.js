@@ -1,15 +1,10 @@
 "use strict";
 
 const n = 3;
-const grid = ["...", ".OO", "..O"];
+const grid = ["...", ".O.", "..."];
 
 const splitArr = (arr) => {
   return arr.map((el) => el.split(""));
-};
-
-const changeState = (arr, coords, newState) => {
-  //
-  //console.log(x, y);
 };
 
 const fillGrid = (arr, target, replacement) => {
@@ -28,43 +23,43 @@ const getBombsToDetonate = (arr, stage) => {
     el.map((char, cindex) => {
       if (char == parseInt(stage - 3)) {
         res.push({ row: rindex, col: cindex });
+        // bombas que detonan por efecto de detonacion vecina.
+        res.push({ row: rindex - 1 < 0 ? 0 : rindex - 1, col: cindex });
+        res.push({ row: rindex + 1, col: cindex });
+        res.push({ row: rindex, col: cindex + 1 });
+        res.push({ row: rindex, col: cindex - 1 < 0 ? 0 : cindex - 1 });
       }
     });
   });
-  return res;
+  // eliminar duplicados {row: x, col: y }
+  const re = res.filter(
+    (v, i, a) => a.findIndex((v2) => v2.col === v.col && v2.row === v.row) === i
+  );
+  return re;
 };
 
 const bombsToDetonateCoords = (arr) => {
-  // coords de bomba inicial,  faltan bombas vecinas.
-  console.log(arr);
   let res = {};
   for (let i = 0; i < arr.length; i++) {
     const row = arr[i]["row"];
-    //    const aboveRow = arr[i]["row"] + 1;
-    //    const belowRow = arr[i]["row"] - 1;
     if (res.hasOwnProperty(row)) {
       res[row].push(arr[i]["col"]);
-      //res[row].push(arr[i]["col"] - 1);
-      //res[row].push(arr[i]["col"] + 1);
     } else {
       res[row] = [];
       res[row][0] = arr[i]["col"];
-      //console.log(arr[i]["col"] + 1);
     }
   }
-  console.log(res);
   return res;
 };
 
 const detonateBombs = (arr, coords) => {
   Object.entries(coords).map(([row, col]) => {
     col.map((digit) => {
-      arr[row][digit] = arr[row][digit].replace("0", ".");
+      arr[row][digit] = "0";
     });
   });
   return arr;
 };
-// ************* considerar generador - yield.
 
 const bomberman = (n, grid) => {
   let tempGrid = splitArr(grid);
@@ -78,9 +73,8 @@ const bomberman = (n, grid) => {
         tempGrid = fillGrid(tempGrid, ".", s);
         break;
       case s == 3:
-        console.log(bombsToDetonateCoords(getBombsToDetonate(tempGrid, s)));
-        //detonateBombs( tempGrid, bombsToDetonateCoords(getBombsToDetonate(tempGrid, s)));
-        //console.log(tempGrid);
+        const lobtd = bombsToDetonateCoords(getBombsToDetonate(tempGrid, s));
+        detonateBombs(tempGrid, lobtd);
         break;
       case s > 3:
         console.log(tempGrid);
@@ -88,6 +82,7 @@ const bomberman = (n, grid) => {
     }
   }
   //return tempGrid;
-  //return joinArray(tempGrid);
+  //sustituir chars: 0, s, por O, .
+  return joinArray(tempGrid);
 };
 console.log(bomberman(n, grid));
