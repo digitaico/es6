@@ -1,15 +1,15 @@
 "use strict";
 
 const n = 3;
-const grid = [".0O", ".O.", "O.."];
+const grid = ["...", ".OO", "..O"];
 
 const splitArr = (arr) => {
   return arr.map((el) => el.split(""));
 };
 
-const changeState = (arr, x, y, newState) => {
+const changeState = (arr, coords, newState) => {
   //
-  console.log(x, y);
+  //console.log(x, y);
 };
 
 const fillGrid = (arr, target, replacement) => {
@@ -35,29 +35,34 @@ const getBombsToDetonate = (arr, stage) => {
 };
 
 const bombsToDetonateCoords = (arr) => {
+  // coords de bomba inicial,  faltan bombas vecinas.
   console.log(arr);
-  // por cada bomo hay que modificar desde 1 hasta 4 puntos (row, col) / cada uno.
-  let res = [];
-  const l = arr.length - 1;
-  for (let a = 0; a < arr.length; a++) {
-    // row 0 : col 1 y col 3;
-    // row 1: col 0 y col 2;
-    // row 2: col 1;
-    // row 3: col 0;
-    // array de arrays en donde index es fila y cada array contine lista de columnas.
-    // asi:::    [[1, 3], [0, 2], [1], [0]]
-    //res.push( rU, cL, rD, cR );
-    const el = arr[a];
-    // para cada el.row, agregar a array en posicion el.row,  un array que contenga las cols cuyo row sea igual.
+  let res = {};
+  for (let i = 0; i < arr.length; i++) {
+    const row = arr[i]["row"];
+    //    const aboveRow = arr[i]["row"] + 1;
+    //    const belowRow = arr[i]["row"] - 1;
+    if (res.hasOwnProperty(row)) {
+      res[row].push(arr[i]["col"]);
+      //res[row].push(arr[i]["col"] - 1);
+      //res[row].push(arr[i]["col"] + 1);
+    } else {
+      res[row] = [];
+      res[row][0] = arr[i]["col"];
+      //console.log(arr[i]["col"] + 1);
+    }
   }
+  console.log(res);
   return res;
 };
 
-const detaonateBombs = (arr, arr2) => {
-  console.log(arr);
-  arr.map((coor) => {
-    // ubicar fila y column y reemplazar en arr2.
+const detonateBombs = (arr, coords) => {
+  Object.entries(coords).map(([row, col]) => {
+    col.map((digit) => {
+      arr[row][digit] = arr[row][digit].replace("0", ".");
+    });
   });
+  return arr;
 };
 // ************* considerar generador - yield.
 
@@ -73,15 +78,16 @@ const bomberman = (n, grid) => {
         tempGrid = fillGrid(tempGrid, ".", s);
         break;
       case s == 3:
-        const listOfBombs = getBombsToDetonate(tempGrid, s);
-        detaonateBombs(bombsToDetonateCoords(listOfBombs), tempGrid);
+        console.log(bombsToDetonateCoords(getBombsToDetonate(tempGrid, s)));
+        //detonateBombs( tempGrid, bombsToDetonateCoords(getBombsToDetonate(tempGrid, s)));
+        //console.log(tempGrid);
         break;
       case s > 3:
-        //console.log(tempGrid);
+        console.log(tempGrid);
         break;
     }
   }
-  return tempGrid;
+  //return tempGrid;
   //return joinArray(tempGrid);
 };
 console.log(bomberman(n, grid));
