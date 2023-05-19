@@ -42,7 +42,7 @@ const bombsToDetonateCoords = (arr) => {
   let res = {};
   for (let i = 0; i < arr.length; i++) {
     const row = arr[i]["row"];
-    if (res.hasOwnProperty(row)) {
+    if (row in res) {
       res[row].push(arr[i]["col"]);
     } else {
       res[row] = [];
@@ -77,6 +77,7 @@ const bomberman = (n, grid) => {
         detonateBombs(tempGrid, lobtd);
         break;
       case s > 3:
+        // crear  funcion que gestione pasos tres y cuatro,  y hacerla recursiva.
         console.log(tempGrid);
         break;
     }
