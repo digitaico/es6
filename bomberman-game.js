@@ -18,24 +18,24 @@ const joinArray = (arr) => {
 };
 
 const getBombsToDetonate = (arr, stage) => {
-  const res = [];
+  let res = [];
   arr.map((el, rindex) => {
     el.map((char, cindex) => {
       if (char == parseInt(stage - 3)) {
         res.push({ row: rindex, col: cindex });
         // bombas que detonan por efecto de detonacion vecina.
         res.push({ row: rindex - 1 < 0 ? 0 : rindex - 1, col: cindex });
-        res.push({ row: rindex + 1, col: cindex });
-        res.push({ row: rindex, col: cindex + 1 });
+        res.push({ row: rindex + 1 > arr.length ? rindex : rindex + 1, col: cindex });
+        res.push({ row: rindex, col: cindex + 1 > el.length ? cindex : cindex - 1});
         res.push({ row: rindex, col: cindex - 1 < 0 ? 0 : cindex - 1 });
       }
     });
   });
   // eliminar duplicados {row: x, col: y }
-  const re = res.filter(
+  res.filter(
     (v, i, a) => a.findIndex((v2) => v2.col === v.col && v2.row === v.row) === i
   );
-  return re;
+  return res;
 };
 
 const bombsToDetonateCoords = (arr) => {
@@ -77,7 +77,7 @@ const bomberman = (n, grid) => {
         detonateBombs(tempGrid, lobtd);
         break;
       case s > 3:
-        // crear  funcion que gestione pasos tres y cuatro,  y hacerla recursiva.
+        // crear  funcion que gestione pasos 2 y 3 y hacerla recursiva.
         console.log(tempGrid);
         break;
     }
