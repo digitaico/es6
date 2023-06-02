@@ -69,7 +69,7 @@ const binaryDivuisibleByFive = () => {
   const binary = (num).toString(2);
   return binary % 5;
 } 
-console.log(binaryDivuisibleByFive())
+//console.log(binaryDivuisibleByFive())
 
 
 // async/await, promises
@@ -77,3 +77,32 @@ console.log(binaryDivuisibleByFive())
 const example = new Promise((resolve, reject) => {
   //
 });
+
+// this
+const obj = {
+  name: this,
+  foo: function () {
+    return this
+  }
+}
+
+function bar() {
+  return this;
+}
+//console.log(obj.name);
+//console.log(obj.foo());
+//console.log(bar());
+
+// call() method
+const person1 = {
+  firstName: 'Jorge',
+  lastNmae: 'Ardila',
+  fullName: function() {
+    return this.firstName + this.lastName
+  }
+}
+const person2 = {
+  firstName: 'Jason',
+  lastName: 'Perez'
+}
+console.log(person1.fullName.call(person2));
