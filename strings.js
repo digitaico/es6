@@ -23,6 +23,7 @@ const checkAnagram = (str1, str2) => {
 }
 //console.log(checkAnagram(str3, str4));
 
+
 // 3. Print first non-repeated char from string.
 const getFirstNonRepeated = (str) => {
   str = [...str];

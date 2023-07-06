@@ -36,3 +36,4 @@ const add3 = (a) => {
   };
 };
 console.log(add3(5)(4)(7));
+console.log(add3(6)(6)(6));
